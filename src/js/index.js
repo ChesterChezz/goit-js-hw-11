@@ -30,7 +30,7 @@ function scrollToTop() {
 
 function refreshCards(arr) {
   if (pageCount === 1) {
-    gallery.innerHTML = ' ';
+    gallery.innerHTML = '';
   }
 
   let str = '';
