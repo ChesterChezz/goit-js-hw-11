@@ -14,7 +14,7 @@ searchBtn.addEventListener('click', async event => {
   event.preventDefault();
   try {
     pageCount = 1;
-    scrollToTop();
+    scrollTop();
     const res = await getPhotos(inputText.value, pageCount);
     refreshCards(res.hits);
   } catch (error) {
@@ -101,7 +101,7 @@ function toggleScrollToTopButton() {
 }
 
 // Прокрутка сторінки вверх при натисканні на кнопку
-function scrollToTop() {
+function scrollTop() {
   window.scrollTo({
     top: 0,
     behavior: 'smooth',
@@ -109,7 +109,7 @@ function scrollToTop() {
 }
 
 // Встановити обробник події для кнопки прокрутки вверх
-scrollToTopBtn.addEventListener('click', scrollToTop);
+scrollToTopBtn.addEventListener('click', scrollTop);
 
 // Встановити обробник події для події прокрутки сторінки
 window.addEventListener('scroll', toggleScrollToTopButton);
