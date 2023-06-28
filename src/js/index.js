@@ -22,12 +22,6 @@ searchBtn.addEventListener('click', async event => {
   }
 });
 
-function scrollToTop() {
-  window.scrollTo({
-    top: 0,
-  });
-}
-
 function refreshCards(arr) {
   let str = '';
 
