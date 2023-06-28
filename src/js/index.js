@@ -29,11 +29,21 @@ function scrollToTop() {
 }
 
 function refreshCards(arr) {
+  let str = '';
+
   if (pageCount === 1) {
     gallery.innerHTML = '';
   }
 
-  let str = '';
+  if (arr.length >= 40) {
+    window.addEventListener('scroll', handleScroll);
+  } else {
+    window.removeEventListener('scroll', handleScroll);
+    Notiflix.Notify.info(
+      'That`s all the pictures we have found for your request!'
+    );
+  }
+
   for (const item of arr) {
     str += `<div class="photo-card">
       <a href="${item.largeImageURL}" data-lightbox="gallery">
@@ -55,7 +65,8 @@ function refreshCards(arr) {
       </div>
     </div>`;
   }
-  gallery.innerHTML += str;
+
+  gallery.insertAdjacentHTML('beforeend', str);
 
   const lightbox = new SimpleLightbox('.photo-card a');
 
@@ -69,16 +80,45 @@ function refreshCards(arr) {
   isLoading = false;
 }
 
-window.addEventListener('scroll', async () => {
+function handleScroll() {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
   if (scrollTop + clientHeight >= scrollHeight - 300 && !isLoading) {
     isLoading = true;
-    try {
-      const res = await getPhotos(inputText.value, pageCount);
-      refreshCards(res.hits);
-    } catch (error) {
-      console.error(error);
-    }
+    getPhotos(inputText.value, pageCount)
+      .then(res => {
+        refreshCards(res.hits);
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
-});
+}
+
+const scrollToTopBtn = document.querySelector('.scroll-down');
+
+// Показати або приховати кнопку прокрутки вверх
+function toggleScrollToTopButton() {
+  if (window.scrollY > 1000) {
+    scrollToTopBtn.style.display = 'block';
+  } else {
+    scrollToTopBtn.style.display = 'none';
+  }
+}
+
+// Прокрутка сторінки вверх при натисканні на кнопку
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+}
+
+// Встановити обробник події для кнопки прокрутки вверх
+scrollToTopBtn.addEventListener('click', scrollToTop);
+
+// Встановити обробник події для події прокрутки сторінки
+window.addEventListener('scroll', toggleScrollToTopButton);
+
+// Викликати функцію для перевірки початкового положення прокрутки
+toggleScrollToTopButton();
